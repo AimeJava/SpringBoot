@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tina.restaurant.dao.AdminMapper">
+  <resultMap id="BaseResultMap" type="com.tina.restaurant.entity.Admin">
+    <id column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="admin_name" jdbcType="VARCHAR" property="adminName" />
+    <result column="admin_pwd" jdbcType="VARCHAR" property="adminPwd" />
+    <result column="admin_create" jdbcType="TIMESTAMP" property="adminCreate" />
+    <result column="admin_modified" jdbcType="TIMESTAMP" property="adminModified" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from admin
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tina.restaurant.entity.Admin">
+    insert into admin (admin_id, admin_name, admin_pwd, 
+      admin_create, admin_modified)
+    values (#{adminId,jdbcType=INTEGER}, #{adminName,jdbcType=VARCHAR}, #{adminPwd,jdbcType=VARCHAR}, 
+      #{adminCreate,jdbcType=TIMESTAMP}, #{adminModified,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.tina.restaurant.entity.Admin">
+    update admin
+    set admin_name = #{adminName,jdbcType=VARCHAR},
+      admin_pwd = #{adminPwd,jdbcType=VARCHAR},
+      admin_create = #{adminCreate,jdbcType=TIMESTAMP},
+      admin_modified = #{adminModified,jdbcType=TIMESTAMP}
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select admin_id, admin_name, admin_pwd, admin_create, admin_modified
+    from admin
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select admin_id, admin_name, admin_pwd, admin_create, admin_modified
+    from admin
+  </select>
+    <select id="verificationAdmin" resultMap="BaseResultMap">
+  select * from Admin where admin_name = #{adminName,jdbcType=VARCHAR} and admin_pwd = #{adminPwd,jdbcType=VARCHAR}
+    </select>
+</mapper>

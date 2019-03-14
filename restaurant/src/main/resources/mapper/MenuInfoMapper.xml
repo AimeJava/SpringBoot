@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tina.restaurant.dao.MenuInfoMapper">
+    <resultMap id="BaseResultMap" type="com.tina.restaurant.entity.MenuInfo">
+        <id column="menu_id" jdbcType="INTEGER" property="menuId"/>
+        <result column="menu_name" jdbcType="VARCHAR" property="menuName"/>
+        <result column="menu_price" jdbcType="DECIMAL" property="menuPrice"/>
+        <result column="menu_image" jdbcType="VARCHAR" property="menuImage"/>
+        <result column="menu_buys" jdbcType="INTEGER" property="menuBuys"/>
+        <result column="menu_remark" jdbcType="VARCHAR" property="menuRemark"/>
+        <result column="menu_discounts" jdbcType="INTEGER" property="menuDiscounts"/>
+        <result column="menu_create" jdbcType="TIMESTAMP" property="menuCreate"/>
+        <result column="menu_modified" jdbcType="TIMESTAMP" property="menuModified"/>
+        <association property="type" javaType="com.tina.restaurant.entity.Types">
+            <id property="typeId" column="type_id"/>
+            <result column="type_name" property="typeName"/>
+            <result column="menu_create" property="typeCreate"/>
+            <result column="menu_modified" property="typeModified"/>
+        </association>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from menu_info
+    where menu_id = #{menuId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.tina.restaurant.entity.MenuInfo">
+    insert into menu_info (menu_id, menu_name, type_id,
+      menu_price, menu_image, menu_buys,
+      menu_remark, menu_discounts, menu_create,
+      menu_modified)
+    values (#{menuId,jdbcType=INTEGER}, #{menuName,jdbcType=VARCHAR}, #{typeId,jdbcType=INTEGER},
+      #{menuPrice,jdbcType=DECIMAL}, #{menuImage,jdbcType=VARCHAR}, #{menuBuys,jdbcType=INTEGER},
+      #{menuRemark,jdbcType=VARCHAR}, #{menuDiscounts,jdbcType=INTEGER}, #{menuCreate,jdbcType=TIMESTAMP},
+      #{menuModified,jdbcType=TIMESTAMP})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.tina.restaurant.entity.MenuInfo">
+    update menu_info
+    set menu_name = #{menuName,jdbcType=VARCHAR},
+      type_id = #{typeId,jdbcType=INTEGER},
+      menu_price = #{menuPrice,jdbcType=DECIMAL},
+      menu_image = #{menuImage,jdbcType=VARCHAR},
+      menu_buys = #{menuBuys,jdbcType=INTEGER},
+      menu_remark = #{menuRemark,jdbcType=VARCHAR},
+      menu_discounts = #{menuDiscounts,jdbcType=INTEGER},
+      menu_create = #{menuCreate,jdbcType=TIMESTAMP},
+      menu_modified = #{menuModified,jdbcType=TIMESTAMP}
+    where menu_id = #{menuId,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select menu_id, menu_name, type_id, menu_price, menu_image, menu_buys, menu_remark,
+    menu_discounts, menu_create, menu_modified
+    from menu_info
+    where menu_id = #{menuId,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select menu_id,
+       menu_name,
+       m.type_id,
+       type_name,
+       menu_price,
+       menu_image,
+       menu_remark,
+       menu_discounts,
+       menu_create,
+       menu_modified
+       from menu_info m
+       left join types t on m.type_id = t.type_id limit 50;
+  </select>
+    <select id="sameType" resultMap="BaseResultMap">
+    select * from menu_info where type_id = #{menuId}
+  </select>
+    <select id="fuzzyQueryMenu" resultMap="BaseResultMap">
+      select * from menu_info where menu_name like '%' #{menuName} '%'
+    </select>
+</mapper>

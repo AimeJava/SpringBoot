@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tina.restaurant.dao.OrderDetailMapper">
+  <resultMap id="BaseResultMap" type="com.tina.restaurant.entity.OrderDetail">
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="menu_id" jdbcType="INTEGER" property="menuId" />
+    <result column="menu_counts" jdbcType="INTEGER" property="menuCounts" />
+    <result column="order_create" jdbcType="TIMESTAMP" property="orderCreate" />
+    <result column="order_modified" jdbcType="TIMESTAMP" property="orderModified" />
+  </resultMap>
+  <insert id="insert" parameterType="com.tina.restaurant.entity.OrderDetail">
+    insert into order_detail (order_id, menu_id, menu_counts, 
+      order_create, order_modified)
+    values (#{orderId,jdbcType=INTEGER}, #{menuId,jdbcType=INTEGER}, #{menuCounts,jdbcType=INTEGER}, 
+      #{orderCreate,jdbcType=TIMESTAMP}, #{orderModified,jdbcType=TIMESTAMP})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select order_id, menu_id, menu_counts, order_create, order_modified
+    from order_detail
+  </select>
+</mapper>

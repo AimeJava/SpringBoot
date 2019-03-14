@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tina.restaurant.dao.OrderInfoMapper">
+  <resultMap id="BaseResultMap" type="com.tina.restaurant.entity.OrderInfo">
+    <id column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="order_number" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="order_state" jdbcType="VARCHAR" property="orderState" />
+    <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="order_pay_state" jdbcType="VARCHAR" property="orderPayState" />
+    <result column="order_remark" jdbcType="VARCHAR" property="orderRemark" />
+    <result column="order_create" jdbcType="TIMESTAMP" property="orderCreate" />
+    <result column="order_modified" jdbcType="TIMESTAMP" property="orderModified" />
+    <association property="userInfo" column="user_info" javaType="com.tina.restaurant.entity.UserInfo">
+      <result column="user_name" property="userName"/>
+      <result column="user_tel" property="userTel"/>
+    </association>
+    <association property="address" javaType="com.tina.restaurant.entity.Address">
+      <result column="address_info" property="addressInfo"/>
+    </association>
+    <collection property="detailList" javaType="java.util.ArrayList" ofType="com.tina.restaurant.entity.OrderDetail">
+      <result column="menu_name" property="menuName"/>
+      <result column="menu_counts" property="menuCounts"/>
+    </collection>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_info
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tina.restaurant.entity.OrderInfo">
+    insert into order_info (order_id, order_number, order_state, 
+      order_time, order_pay_state, order_remark, 
+      user_id, address_id, order_create, 
+      order_modified)
+    values (#{orderId,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR}, #{orderState,jdbcType=INTEGER}, 
+      #{orderTime,jdbcType=TIMESTAMP}, #{orderPayState,jdbcType=VARCHAR}, #{orderRemark,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=INTEGER}, #{addressId,jdbcType=VARCHAR}, #{orderCreate,jdbcType=TIMESTAMP}, 
+      #{orderModified,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.tina.restaurant.entity.OrderInfo">
+    update order_info
+    set order_number = #{orderNumber,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=INTEGER},
+      order_time = #{orderTime,jdbcType=TIMESTAMP},
+      order_pay_state = #{orderPayState,jdbcType=VARCHAR},
+      order_remark = #{orderRemark,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      address_id = #{addressId,jdbcType=VARCHAR},
+      order_create = #{orderCreate,jdbcType=TIMESTAMP},
+      order_modified = #{orderModified,jdbcType=TIMESTAMP}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select order_id, order_number, order_state, order_time, order_pay_state, order_remark, 
+    user_id, address_id, order_create, order_modified
+    from order_info
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <select id="realTimeOrder" resultMap="BaseResultMap">
+select i.order_id, i.order_number, i.order_state,i.order_time, i.order_pay_state, m.menu_name, d.menu_counts, i.order_remark,a.address_info,u.user_name,u.user_tel
+from order_info i
+       left join order_detail d on i.order_id = d.order_id
+       left join menu_info m on d.menu_id = m.menu_id
+       left join user_info u on i.user_id = u.user_id
+       left join address a on i.address_id = a.address_id where order_state = '未接单';
+  </select>
+  <select id="historyOrder" resultMap="BaseResultMap">
+    select i.order_id, i.order_number, i.order_state,i.order_time, i.order_pay_state, m.menu_name, d.menu_counts, i.order_remark,a.address_info,u.user_name,u.user_tel
+from order_info i
+       left join order_detail d on i.order_id = d.order_id
+       left join menu_info m on d.menu_id = m.menu_id
+       left join user_info u on i.user_id = u.user_id
+       left join address a on i.address_id = a.address_id where order_state = '已接单';;
+  </select>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tina.restaurant.dao.MessageMapper">
+  <resultMap id="BaseResultMap" type="com.tina.restaurant.entity.Message">
+    <result column="msg_id" jdbcType="INTEGER" property="msgId" />
+    <result column="menu_id" jdbcType="INTEGER" property="menuId" />
+    <result column="msg_rating" jdbcType="INTEGER" property="msgRating" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="msg" jdbcType="VARCHAR" property="msg" />
+    <result column="msg_time" jdbcType="TIMESTAMP" property="msgTime" />
+    <result column="msg_modified" jdbcType="TIMESTAMP" property="msgModified" />
+  </resultMap>
+  <insert id="insert" parameterType="com.tina.restaurant.entity.Message">
+    insert into message (msg_id, menu_id, msg_rating, 
+      user_id, msg, msg_time, 
+      msg_modified)
+    values (#{msgId,jdbcType=INTEGER}, #{menuId,jdbcType=INTEGER}, #{msgRating,jdbcType=INTEGER}, 
+      #{userId,jdbcType=INTEGER}, #{msg,jdbcType=VARCHAR}, #{msgTime,jdbcType=TIMESTAMP}, 
+      #{msgModified,jdbcType=TIMESTAMP})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select msg_id, menu_id, msg_rating, user_id, msg, msg_time, msg_modified
+    from message
+  </select>
+</mapper>

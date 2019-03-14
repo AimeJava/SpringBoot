@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tina.restaurant.dao.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.tina.restaurant.entity.UserInfo">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_pwd" jdbcType="VARCHAR" property="userPwd" />
+    <result column="user_photos" jdbcType="VARCHAR" property="userPhotos" />
+    <result column="address_id" jdbcType="INTEGER" property="addressId" />
+    <result column="user_tel" jdbcType="VARCHAR" property="userTel" />
+    <result column="user_create" jdbcType="TIMESTAMP" property="userCreate" />
+    <result column="user_modified" jdbcType="TIMESTAMP" property="userModified" />
+    <result column="discount_id" jdbcType="INTEGER" property="discountId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user_info
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tina.restaurant.entity.UserInfo">
+    insert into user_info (user_id, user_name, user_pwd, 
+      user_photos, address_id, user_tel, 
+      user_create, user_modified, discount_id
+      )
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR}, 
+      #{userPhotos,jdbcType=VARCHAR}, #{addressId,jdbcType=INTEGER}, #{userTel,jdbcType=VARCHAR}, 
+      #{userCreate,jdbcType=TIMESTAMP}, #{userModified,jdbcType=TIMESTAMP}, #{discountId,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.tina.restaurant.entity.UserInfo">
+    update user_info
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_pwd = #{userPwd,jdbcType=VARCHAR},
+      user_photos = #{userPhotos,jdbcType=VARCHAR},
+      address_id = #{addressId,jdbcType=INTEGER},
+      user_tel = #{userTel,jdbcType=VARCHAR},
+      user_create = #{userCreate,jdbcType=TIMESTAMP},
+      user_modified = #{userModified,jdbcType=TIMESTAMP},
+      discount_id = #{discountId,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select user_id, user_name, user_pwd, user_photos, address_id, user_tel, user_create, 
+    user_modified, discount_id
+    from user_info
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select user_id, user_name, user_pwd, user_photos, address_id, user_tel, user_create, 
+    user_modified, discount_id
+    from user_info
+  </select>
+  <select id="userLogin" resultMap="BaseResultMap">
+     select * from user_info where user_tel = #{userTel,jdbcType=VARCHAR} and user_pwd = #{userPwd,jdbcType=VARCHAR}
+  </select>
+
+
+</mapper>
