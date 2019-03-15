@@ -21,7 +21,7 @@
                     </el-menu-item>
                 </el-menu>
             </el-aside>
-            <!--主要内容 待组件化-->
+            <!--主要内容 `待组件化-->
             <el-main>
                 <el-col v-for="menu in menuInfo" :key="menu.menuId">
                     <el-card :body-style="{ padding: '0px' }">
