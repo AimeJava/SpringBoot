@@ -77,10 +77,12 @@
             }
         },
         created () {
-            fetch('http://localhost:8888/cart?userId=1')
+            var parse = JSON.parse(sessionStorage.getItem('userInfo'));
+            fetch('http://localhost:8888/cart?userId='+ parse.userId)
                 .then(response => response.json())
                 .then(resp => {
-                   // console.log(resp.data);
+                    //console.log(resp.data.menuInfo);
+                   // console.log(resp.data.menuInfo.menuImage);
                     this.tableData = resp.data;
                     //alert(sessionStorage.getItem("userInfo"));
                 });

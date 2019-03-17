@@ -1,39 +1,60 @@
 <template>
     <div>
-        <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px"
-                 class="demo-ruleForm">
-            <el-form-item label="用户名" prop="user">
-                <el-input type="text" v-model="ruleForm2.user" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="pass">
-                <el-input type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="checkPass">
-                <el-input type="password" v-model="ruleForm2.checkPass" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-                <el-button @click="resetForm('ruleForm2')">重置</el-button>
-            </el-form-item>
-        </el-form>
+        <el-dialog
+                title="注册"
+                :visible.sync="dialogVisible"
+                width="30%"
+        >
+            <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px"
+                     class="demo-ruleForm">
+                <el-form-item label="手机号" prop="user">
+                    <el-input type="text" v-model="ruleForm2.user" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="pass">
+                    <el-input type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="checkPass">
+                    <el-input type="password" v-model="ruleForm2.checkPass" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+                    <el-button @click="resetForm('ruleForm2')">重置</el-button>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+    <!--<el-button @click="dialogVisible = false">取 消</el-button>-->
+                <!--<el-button type="primary" @click="dialogVisible = false">确 定</el-button>-->
+  </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
     export default {
         data() {
+
+            // var TEL_REGEXP = /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/;
             //定义验证规则
             var checkUser = (rule, value, callback) => {
+
                 if (!value) {
-                    return callback(new Error('用户名不能为空'));
-                }
-                setTimeout(() => {
-                    if (Number.isInteger(value)) {
-                        callback(new Error('请输入尊称'));
+                    return callback(new Error('手机号不能为空'));
+                } else {
+                    const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+                    if (reg.test(value)) {
+                        fetch('http://localhost:8888/user/getTel?userTel='+value).then(resp => resp.json())
+                            .then(resp => {
+                                if (resp.code === 200) {
+                                    return callback(new Error('此手机号已注册'));
+                                } else {
+                                    callback();
+                                }
+                            });
+
                     } else {
-                        callback();
+                        return callback(new Error('请输入正确的手机号'));
                     }
-                });
+                }
             };
             //定义验证规则
             var validatePass = (rule, value, callback) => {
@@ -57,6 +78,7 @@
                 }
             };
             return {
+                dialogVisible: false,
                 ruleForm2: {
                     user: '',
                     pass: '',
@@ -83,9 +105,9 @@
                 this.$refs[formName].validate((valid) => {
 
                     if (valid) {
-                        let userInfo = {"userName": this.ruleForm2.user, "userPwd": this.ruleForm2.pass};
+                        let userInfo = {"userTel": this.ruleForm2.user, "userPwd": this.ruleForm2.pass};
 
-                        fetch("http://localhost:8888/insertUser", {
+                        fetch("http://localhost:8888/user/insert", {
                             method: 'POST',
                             headers: new Headers({
                                 'Content-Type': 'application/json'
@@ -102,7 +124,11 @@
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
+            },
+            cut() {
+                this.dialogVisible = true;
             }
+
         }
     }
 </script>

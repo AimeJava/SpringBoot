@@ -14,12 +14,16 @@
             <el-form-item style="width:100%;">
                 <el-button type="primary" style="width:100%;" @click="btn_login(userForm)">登录
                 </el-button>
+                <!--<a >没有账号？注册一个</a>-->
+                <el-button type="text" @click="showRegister">没有账号？注册一个</el-button>
             </el-form-item>
         </el-form>
+        <v-enroll ref="enroll"></v-enroll>
     </div>
 </template>
 
 <script>
+    import enroll from '../components/login/enroll'
     export default {
         data() {
             return {
@@ -67,9 +71,16 @@
 
 
                     });
-                // console.log(this.userForm)
-                //this.$router.push('/')
+            },
+            register(){
+
+            },
+            showRegister(){
+                this.$refs.enroll.cut();
             }
+        },
+        components: {
+            'v-enroll': enroll
         }
     }
 
