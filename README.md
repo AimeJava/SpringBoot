@@ -9,4 +9,7 @@
 采用技术：Element+Vue.js
 
 ### restaurant 是后端项目，仅提供接口 ###
-采用技术：Spring Boot、
+采用技术：Spring Boot、Mybatis、PageHelper
+数据库：MariaDB
+管理工具：Maven
+
