@@ -6,7 +6,7 @@
 采用技术：iView、Axios、Vue.js
 
 ### storefront 文件是门户网站 ###
-采用技术：Element+Vue.js
+采用技术：Element、Vue.js
 
 ### restaurant 是后端项目，仅提供接口 ###
 采用技术：Spring Boot、Mybatis、PageHelper
